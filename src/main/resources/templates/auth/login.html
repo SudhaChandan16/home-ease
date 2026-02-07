@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Login - Home Ease')}"></head>
+
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5 fade-in">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-coffee">Welcome Back</h2>
+                    <p class="text-muted">Login to access your account</p>
+                </div>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div th:if="${param.error}" class="alert alert-danger d-flex align-items-center">
+                            <i class="fas fa-exclamation-circle me-2"></i>Invalid username or password.
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-success d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2"></i>You have been logged out.
+                        </div>
+                        <div th:if="${param.success}" class="alert alert-success d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2"></i>Registration successful! Please login.
+                        </div>
+
+                        <form th:action="@{/login}" method="post">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="name@example.com" required autofocus>
+                                <label for="email">Email Address</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password" required>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <p class="text-muted">Don't have an account? <a href="/register"
+                            class="fw-bold text-decoration-none text-accent">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>

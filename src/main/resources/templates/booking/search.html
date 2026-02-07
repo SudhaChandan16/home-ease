@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Find a Service')}"></head>
+
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4 text-center">Find a Professional</h2>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form th:action="@{/user/search}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Search (Name, Location, Service)</label>
+                        <input type="text" name="keyword" class="form-control" placeholder="e.g. Cleaner in New York"
+                            th:value="${keyword}">
+                    </div>
+                    <div class="col-md-2 align-self-end">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" th:if="${providers.empty}">
+                <div class="alert alert-info text-center">
+                    No providers found matching your criteria.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4" th:each="provider : ${providers}">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-user-circle fa-4x text-muted"></i>
+                        </div>
+                        <h5 class="card-title" th:text="${provider.user.name}">Provider Name</h5>
+                        <p th:class="'mb-1 ' + ${provider.category.textClass}"
+                            th:text="${provider.category.displayName}">Category</p>
+                        <p class="text-primary fw-bold" th:text="'₹' + ${provider.hourlyRate} + '/hr'">Rate</p>
+                        <p class="card-text small text-muted" th:text="${provider.bio}">Bio...</p>
+                        <p class="small"><i class="fas fa-map-marker-alt"></i> <span
+                                th:text="${provider.user.address}">Location</span></p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 pb-3">
+                        <a th:href="@{/user/book(providerId=${provider.id})}" class="btn btn-success w-100">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>
