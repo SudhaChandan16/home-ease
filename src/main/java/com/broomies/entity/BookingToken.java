@@ -1,18 +1,12 @@
 package com.broomies.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "booking_tokens")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookingToken {
 
     @Id
@@ -27,9 +21,60 @@ public class BookingToken {
 
     private LocalDateTime expiryDate;
 
+    public BookingToken() {
+    }
+
+    public BookingToken(Long id, String token, Booking booking, LocalDateTime expiryDate) {
+        this.id = id;
+        this.token = token;
+        this.booking = booking;
+        this.expiryDate = expiryDate;
+    }
+
     public BookingToken(Booking booking) {
         this.booking = booking;
         this.token = UUID.randomUUID().toString();
         this.expiryDate = LocalDateTime.now().plusHours(24); // Token valid for 24 hours
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingToken{" +
+                "id=" + id +
+                ", token='" + token + '\'' +
+                ", expiryDate=" + expiryDate +
+                '}';
     }
 }

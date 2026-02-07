@@ -2,15 +2,9 @@ package com.broomies.entity;
 
 import com.broomies.enums.RoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Role {
 
     @Id
@@ -21,7 +15,39 @@ public class Role {
     @Column(unique = true)
     private RoleType name;
 
+    public Role() {
+    }
+
+    public Role(Long id, RoleType name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Role(RoleType name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RoleType getName() {
+        return name;
+    }
+
+    public void setName(RoleType name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
     }
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('My Dashboard')}"></head>
+
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 fade-in">
+            <div>
+                <h2 class="fw-bold text-coffee mb-0">My Dashboard</h2>
+                <p class="text-muted">Manage your bookings and requests</p>
+            </div>
+            <a href="/user/book" class="btn btn-primary rounded-pill px-4">
+                <i class="fas fa-plus me-2"></i>New Booking
+            </a>
+        </div>
+
+        <div class="alert alert-success fade-in" th:if="${param.booked}">
+            <i class="fas fa-check-circle me-2"></i>Booking request sent successfully! Please wait for provider
+            confirmation.
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4 fade-in delay-100">
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm h-100">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-coffee text-white rounded-circle p-3 me-3">
+                            <i class="fas fa-calendar-alt fa-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Bookings</p>
+                            <h3 class="fw-bold mb-0" th:text="${bookings.size()}">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more stats if available in future -->
+        </div>
+
+        <div class="card border-0 shadow-sm fade-in delay-200">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0 fw-bold text-coffee">Booking History</h5>
+            </div>
+            <div class="card-body p-0">
+                <div th:if="${bookings.empty}" class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-calendar-times fa-4x text-light"></i>
+                    </div>
+                    <h5 class="text-muted">No bookings yet</h5>
+                    <p class="text-muted small mb-4">You haven't made any service requests.</p>
+                    <a href="/user/find" class="btn btn-outline-primary rounded-pill">Find Professionals</a>
+                </div>
+
+                <div class="table-responsive" th:if="${!bookings.empty}">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light text-secondary">
+                            <tr>
+                                <th class="border-0 ps-4">Date</th>
+                                <th class="border-0">Provider</th>
+                                <th class="border-0">Service</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="booking : ${bookings}">
+                                <td class="ps-4 fw-bold"
+                                    th:text="${#temporals.format(booking.serviceDate, 'dd-MM-yyyy HH:mm')}">Date</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-light rounded-circle p-2 me-2">
+                                            <i th:class="${booking.provider.category.iconClass} + ' text-muted'"></i>
+                                        </div>
+                                        <span th:text="${booking.provider.user.name}">Provider</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border"
+                                        th:text="${booking.provider.category.displayName}">Category</span>
+                                </td>
+                                <td>
+                                    <span class="badge"
+                                        th:classappend="${booking.status.name() == 'PENDING' ? 'bg-warning' : 
+                                                        (booking.status.name() == 'CONFIRMED' ? 'bg-success' : 'bg-danger')}"
+                                        th:text="${booking.status}">Status</span>
+                                </td>
+                                <td class="text-muted small" th:text="${booking.serviceAddress}">Address</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+
+</html>

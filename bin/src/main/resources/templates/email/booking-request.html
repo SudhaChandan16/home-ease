@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Booking Request</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        <h2 style="color: #007bff;">New Booking Request</h2>
+        <p>Hello <span th:text="${providerName}">Provider</span>,</p>
+        <p>You have received a new service request!</p>
+
+        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <p><strong>Customer:</strong> <span th:text="${customerName}">Customer Name</span></p>
+            <p><strong>Date & Time:</strong> <span th:text="${serviceDate}">Date</span></p>
+            <p><strong>Address:</strong> <span th:text="${address}">Address</span></p>
+        </div>
+
+        <p>Please accept or reject this request within 24 hours.</p>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a th:href="${acceptUrl}"
+                style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">Accept</a>
+            <a th:href="${rejectUrl}"
+                style="background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reject</a>
+        </div>
+
+        <p style="margin-top: 30px; font-size: 0.8em; color: #888;">If the buttons don't work, copy and paste these
+            links:</p>
+        <p style="font-size: 0.8em; color: #888;">Accept: <span th:text="${acceptUrl}">url</span></p>
+        <p style="font-size: 0.8em; color: #888;">Reject: <span th:text="${rejectUrl}">url</span></p>
+    </div>
+</body>
+
+</html>
