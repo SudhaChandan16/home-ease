@@ -17,6 +17,16 @@ services:
     networks:
       - broomies-network
 
+  frontend:
+    build: ./frontend
+    container_name: broomies-frontend
+    ports:
+      - "5173:80" # Map host 5173 to nginx port 80
+    depends_on:
+      - app
+    networks:
+      - broomies-network
+
   mysql_db:
     image: mysql:8.0
     container_name: broomies-mysql
