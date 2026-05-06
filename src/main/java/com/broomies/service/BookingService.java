@@ -9,8 +9,9 @@ import com.broomies.enums.BookingStatus;
 import com.broomies.repository.BookingRepository;
 import com.broomies.repository.BookingTokenRepository;
 import com.broomies.repository.ProviderRepository;
-import com.broomies.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BookingService {
@@ -25,24 +27,26 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BookingTokenRepository tokenRepository;
     private final ProviderRepository providerRepository;
-    private final UserRepository userRepository; // To get current user reference if needed
     private final EmailService emailService;
 
     @Value("${server.port}")
     private String serverPort;
 
     public BookingService(BookingRepository bookingRepository, BookingTokenRepository tokenRepository,
-            ProviderRepository providerRepository, UserRepository userRepository, EmailService emailService) {
+            ProviderRepository providerRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.tokenRepository = tokenRepository;
         this.providerRepository = providerRepository;
-        this.userRepository = userRepository;
         this.emailService = emailService;
     }
 
     @Transactional
-    public void createBooking(User user, BookingRequestDto dto) {
-        Provider provider = providerRepository.findById(dto.getProviderId())
+    public void createBooking(User user, @NonNull BookingRequestDto dto) {
+        Long providerId = dto.getProviderId();
+        if (providerId == null) {
+            throw new RuntimeException("Provider ID cannot be null");
+        }
+        Provider provider = providerRepository.findById(providerId)
                 .orElseThrow(() -> new RuntimeException("Provider not found"));
 
         // Calculate End Time
@@ -93,7 +97,7 @@ public class BookingService {
         variables.put("acceptUrl", acceptUrl);
         variables.put("rejectUrl", rejectUrl);
 
-        emailService.sendHtmlEmail(provider.getUser().getEmail(), "New Booking Request", "email/booking-request",
+        emailService.sendHtmlEmail(Objects.requireNonNull(provider.getUser().getEmail()), "New Booking Request", "email/booking-request",
                 variables);
     }
 
@@ -133,7 +137,7 @@ public class BookingService {
         variables.put("providerName", booking.getProvider().getUser().getName());
         variables.put("serviceDate", booking.getServiceDate());
 
-        emailService.sendHtmlEmail(user.getEmail(), "Booking " + status, "email/booking-status", variables);
+        emailService.sendHtmlEmail(Objects.requireNonNull(user.getEmail()), "Booking " + status, "email/booking-status", variables);
     }
 
     public List<Booking> getBookingsForUser(User user) {

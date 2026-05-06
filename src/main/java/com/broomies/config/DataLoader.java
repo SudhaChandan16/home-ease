@@ -21,10 +21,10 @@ public class DataLoader {
             PasswordEncoder passwordEncoder) {
         return args -> {
             // Initialize Roles
-            Role roleUser = roleRepository.findByName(RoleType.ROLE_USER)
+            roleRepository.findByName(RoleType.ROLE_USER)
                     .orElseGet(() -> roleRepository.save(new Role(RoleType.ROLE_USER)));
 
-            Role roleProvider = roleRepository.findByName(RoleType.ROLE_PROVIDER)
+            roleRepository.findByName(RoleType.ROLE_PROVIDER)
                     .orElseGet(() -> roleRepository.save(new Role(RoleType.ROLE_PROVIDER)));
 
             Role roleAdmin = roleRepository.findByName(RoleType.ROLE_ADMIN)

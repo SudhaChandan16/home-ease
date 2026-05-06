@@ -3,6 +3,7 @@ package com.broomies.service;
 import com.broomies.entity.Provider;
 import com.broomies.enums.ProviderCategory;
 import com.broomies.repository.ProviderRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +25,11 @@ public class ProviderService {
         return providerRepository.findByCategory(category);
     }
 
-    public Provider getProviderById(Long id) {
+    public Provider getProviderById(@NonNull Long id) {
         return providerRepository.findById(id).orElseThrow(() -> new RuntimeException("Provider not found"));
     }
 
-    public void updateAvailability(Long providerId, boolean isAvailable) {
+    public void updateAvailability(@NonNull Long providerId, boolean isAvailable) {
         Provider provider = getProviderById(providerId);
         provider.setIsAvailable(isAvailable);
         providerRepository.save(provider);
